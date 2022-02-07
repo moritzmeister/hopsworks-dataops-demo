@@ -23,7 +23,7 @@ jobs:
         python-version: "3.8"
 
     - name: Install dependencies
-      run: pip3 install hsfs[dev,hive,docs]==2.5.1
+      run: pip3 install hsfs[dev,hive]==2.5.1
 
     - name: Checkout Code on cluster
       env:
