@@ -1,0 +1,31 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Git pull on Hopsworks
+
+on:
+  push:
+    branches: [ production ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+
+    - name: Install dependencies
+      run: pip3 install hsfs[dev,hive,docs]==2.5.1
+
+    - name: Checkout Code on cluster
+      env:
+        HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_FABIO }}
+      run: python3 update_git.py --key $HOPSWORKS_API_KEY
