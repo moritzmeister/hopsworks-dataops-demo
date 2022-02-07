@@ -38,4 +38,4 @@ payload = {
 json_value = json.dumps(payload)
 query_params = {"action": "PULL"}
 
-cl._send_request("POST", path_params, query_params=query_params, headers=headers, data=json_value)
+print(cl._send_request("POST", path_params, query_params=query_params, headers=headers, data=json_value))
