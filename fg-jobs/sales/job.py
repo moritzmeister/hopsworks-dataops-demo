@@ -41,7 +41,8 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     total_features.reset_index(inplace=True)
     return total_features
 
-feature_upsert_df = engineer_features(args.data)
+df = read_data(args.data)
+feature_upsert_df = engineer_features(df)
 
 conn = hsfs.connection()
 fs = conn.get_feature_store()
