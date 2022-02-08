@@ -10,6 +10,13 @@ NAME = "weekly_sales"
 PK = ["store", "dept"]
 DESCRIPTION = "containing the latest weekly sales of each store/department"
 
+extra_hudi_options = {
+    "hoodie.bulkinsert.shuffle.parallelism":"1",
+    "hoodie.insert.shuffle.parallelism":"1",
+    "hoodie.upsert.shuffle.parallelism":"1",
+    "hoodie.parquet.compression.ratio":"0.5"
+}
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--data", help="Data location", type=str, default="hdfs:///Projects/workshop_production/Resources/sales-set.csv")
@@ -49,7 +56,7 @@ fs = conn.get_feature_store()
 
 try:
     fg = fs.get_feature_group(NAME, VERSION)
-    fg.insert(feature_upsert_df)
+    fg.insert(feature_upsert_df, write_options=extra_hudi_options)
 except:
     fg = fs.create_feature_group(NAME, VERSION, statistics_config=False, primary_key=PK)
-    fg.save(feature_upsert_df)
+    fg.save(feature_upsert_df, write_options=extra_hudi_options)
