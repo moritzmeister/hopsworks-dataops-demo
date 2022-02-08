@@ -5,7 +5,7 @@ import numpy as np
 
 import hsfs
 
-VERSION = 1
+VERSION = 2
 NAME = "weekly_sales"
 PK = ["store", "dept"]
 DESCRIPTION = "containing the latest weekly sales of each store/department"
