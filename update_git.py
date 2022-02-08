@@ -25,7 +25,7 @@ path_params = [
     cl._project_id,
     "git",
     "repository",
-    2062,
+    3086,
 ]
 
 headers = {"content-type": "application/json"}
