@@ -1,5 +1,6 @@
 import json
 import argparse
+import time
 
 import hsfs
 from hsfs import client
@@ -39,3 +40,6 @@ json_value = json.dumps(payload)
 query_params = {"action": "PULL"}
 
 print(cl._send_request("POST", path_params, query_params=query_params, headers=headers, data=json_value))
+
+# should be polling the git endpoint instead
+time.sleep(30)

@@ -23,9 +23,14 @@ jobs:
         python-version: "3.8"
 
     - name: Install dependencies
-      run: pip3 install hsfs[dev,hive]==2.5.1
+      run: pip3 install hsfs[dev,hive]==2.5.1 hops==2.5.0.1
 
     - name: Checkout Code on cluster
       env:
         HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_FABIO }}
       run: python3 update_git.py --key $HOPSWORKS_API_KEY
+
+    - name: Start Feature Engineering Jobs
+      env:
+        HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_FABIO }}
+      run: python3 launch_jobs.py --key $HOPSWORKS_API_KEY
