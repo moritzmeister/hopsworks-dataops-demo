@@ -1,11 +1,13 @@
 import argparse
 
-import config
-import feature_code
+import pandas as pd
 
 import hsfs
 
-FG_version = config.__version__
+VERSION = 1
+NAME = "weekly_sales_target"
+PK = ["store", "dept"]
+DESCRIPTION = "containing the latest weekly sales of each store/department"
 
 parser = argparse.ArgumentParser()
 
@@ -13,14 +15,22 @@ parser.add_argument("-d", "--data", help="Data location", type=str, default="hdf
 
 args = parser.parse_args()
 
-feature_upsert_df = feature_code.engineer_features(args.data)
+def read_data(path: str) -> pd.DataFrame:
+    return pd.read_csv(path)
+
+def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
+    df["date"] = pd.to_datetime(df["date"])
+    df.sort_values(["store", "dept", "date"], inplace=True)
+    return df.groupby(["store", "dept"]).last().reset_index()
+
+feature_upsert_df = engineer_features(args.data)
 
 conn = hsfs.connection()
 fs = conn.get_feature_store()
 
 try:
-    fg = fs.get_feature_group(config.__name__, config.__name__)
+    fg = fs.get_feature_group(NAME, VERSION)
     fg.insert(feature_upsert_df)
 except:
-    fg = fs.create_feature_group(config.__name__, config.__version__, statistics_config=False, primary_key=config.__pk__)
+    fg = fs.create_feature_group(NAME, VERSION, statistics_config=False, primary_key=PK)
     fg.save(feature_upsert_df)
