@@ -49,7 +49,7 @@ for model in models_list:
         file.write(result)
 
     mr = project.get_model_registry()
-    model = mr.sklearn.create_model("other_model", input_example=[4440515374959168])
+    model = mr.sklearn.create_model("model_two", input_example=[4440515374959168])
     model.save(model_dir)
 
     depl = model.deploy(
