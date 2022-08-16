@@ -5,7 +5,7 @@ name: Git pull on Hopsworks
 
 on:
   push:
-    branches: [ production ]
+    branches: [ webinar ]
 
 jobs:
   build:
@@ -23,9 +23,10 @@ jobs:
         python-version: "3.8"
 
     - name: Install dependencies
-      run: pip3 install hsfs[dev,hive,docs]==2.5.1
+      run: pip3 install hopsworks wandb
 
     - name: Checkout Code on cluster
       env:
-        HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_FABIO }}
-      run: python3 update_git.py --key $HOPSWORKS_API_KEY
+        HOPSWORKS_API_KEY: ${{ secrets.APP_API_KEY }}
+        WANDB_KEY: ${{ secrets.WANDB_KEY }}
+      run: python3 deploy_model.py -k $HOPSWORKS_API_KEY -w $WANDB_KEY

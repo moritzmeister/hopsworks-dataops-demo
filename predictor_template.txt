@@ -1,0 +1,26 @@
+import os
+import numpy as np
+import hsfs
+import joblib
+
+class Predict(object):
+
+    def __init__(self):
+        """ Initializes the serving state, reads a trained model"""        
+        # get feature store handle
+        fs_conn = hsfs.connection()
+        self.fs = fs_conn.get_feature_store()
+        
+        # get feature views
+        self.fv = self.fs.get_feature_view("$fv", $fv_version)
+        
+        # initialise serving
+        self.fv.init_serving(1)
+
+        # load the trained model
+        self.model = joblib.load(os.environ["ARTIFACT_FILES_PATH"] + "/fraud.model.pkl")
+        print("Initialization Complete")
+
+    def predict(self, inputs):
+        """ Serves a prediction request usign a trained model"""
+        return self.model.predict(np.asarray(self.fv.get_feature_vector({"cc_num": inputs[0][0]})).reshape(1, -1)).tolist() # Numpy Arrays are not JSON serializable
