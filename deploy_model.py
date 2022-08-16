@@ -49,11 +49,11 @@ for model in models_list:
         file.write(result)
 
     mr = project.get_model_registry()
-    model = mr.sklearn.create_model(tag["name"], input_example=[4440515374959168])
+    model = mr.sklearn.create_model("other_model", input_example=[4440515374959168])
     model.save(model_dir)
 
     depl = model.deploy(
-        name="mlops", 
+        name="githubaction", 
         model_server="PYTHON",
         serving_tool="KSERVE",
         script_file=model.model_path + "/" + str(model.version) + "/predictor.py"
