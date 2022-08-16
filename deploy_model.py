@@ -52,11 +52,11 @@ for model in models_list:
     model = mr.sklearn.create_model("test_model", input_example=[4440515374959168])
     model.save(model_dir)
 
-    model.deploy(
-        name="fraudonlinemodeldeployment", 
+    depl = model.deploy(
+        name="mlops", 
         model_server="PYTHON",
         serving_tool="KSERVE",
         script_file=model.model_path + "/" + str(model.version) + "/predictor.py"
     )
 
-print(result)
+    depl.start()
